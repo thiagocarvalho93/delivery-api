@@ -17,7 +17,7 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Produto>> ObterTodos() => await _produtoService.ObterTodosAsync();
+        public async Task<IEnumerable<Produto>> ObterTodos() => await _produtoService.ObterTodosAsync();
 
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Produto>> ObterPorId(string id)
@@ -42,7 +42,7 @@ namespace DeliveryApi.Api.Controllers
             try
             {
                 await _produtoService.AdicionarAsync(novoProduto);
-
+                
                 return CreatedAtAction(nameof(ObterPorId), new { id = novoProduto.Id }, novoProduto);
             }
             catch (NotFoundException ex)

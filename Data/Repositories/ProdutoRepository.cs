@@ -14,7 +14,7 @@ namespace DeliveryApi.Data.Repositories
             _context = context;
         }
 
-        public async Task<List<Produto>> ObterTodosAsync() => await _context.Produtos.Find(_ => true).ToListAsync();
+        public async Task<IEnumerable<Produto>> ObterTodosAsync() => await _context.Produtos.Find(_ => true).ToListAsync();
 
         public async Task<Produto?> ObterPorIdAsync(string id) => await _context.Produtos.Find(x => x.Id == id).FirstOrDefaultAsync();
 

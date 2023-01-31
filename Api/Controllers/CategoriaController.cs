@@ -17,7 +17,7 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Categoria>> ObterTodos() => await _categoriaService.ObterTodosAsync();
+        public async Task<IEnumerable<Categoria>> ObterTodos() => await _categoriaService.ObterTodosAsync();
 
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Categoria>> ObterPorId(string id)

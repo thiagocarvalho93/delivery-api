@@ -26,7 +26,7 @@ namespace DeliveryApi.Domain.Models
         [BsonElement("valor")]
         public Double Valor { get; set; }
         [BsonElement("adicionais")]
-        public List<Adicional> Adicionais { get; set; }
+        public IEnumerable<Adicional> Adicionais { get; set; }
 
         public Produto()
         {

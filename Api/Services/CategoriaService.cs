@@ -21,9 +21,9 @@ namespace DeliveryApi.Api.Services
             .SetSlidingExpiration(TimeSpan.FromDays(1));
         }
 
-        public async Task<List<Categoria>> ObterTodosAsync()
+        public async Task<IEnumerable<Categoria>> ObterTodosAsync()
         {
-            var categorias = await _memoryCache.GetOrCreateAsync<List<Categoria>>(CACHE_KEY, async item =>
+            var categorias = await _memoryCache.GetOrCreateAsync<IEnumerable<Categoria>>(CACHE_KEY, async item =>
             {
                 return await _categoriaRepository.ObterTodosAsync();
             });

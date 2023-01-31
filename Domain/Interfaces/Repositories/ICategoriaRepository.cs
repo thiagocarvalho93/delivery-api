@@ -4,7 +4,7 @@ namespace DeliveryApi.Domain.Interfaces.Repositories
 {
     public interface ICategoriaRepository
     {
-        public Task<List<Categoria>> ObterTodosAsync();
+        public Task<IEnumerable<Categoria>> ObterTodosAsync();
         public Task<Categoria?> ObterPorIdAsync(string id);
         public Task<Categoria?> ObterPorNomeAsync(string nome);
         public Task AdicionarAsync(Categoria newCategoria);

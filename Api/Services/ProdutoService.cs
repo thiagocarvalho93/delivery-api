@@ -21,9 +21,9 @@ namespace DeliveryApi.Api.Services
             _memoryCache = memoryCache;
         }
 
-        public async Task<List<Produto>> ObterTodosAsync()
+        public async Task<IEnumerable<Produto>> ObterTodosAsync()
         {
-            var produtos = await _memoryCache.GetOrCreateAsync<List<Produto>>(CACHE_KEY, async item =>
+            var produtos = await _memoryCache.GetOrCreateAsync<IEnumerable<Produto>>(CACHE_KEY, async item =>
             {
                 return await _produtoRepository.ObterTodosAsync();
             });
