@@ -49,7 +49,7 @@ namespace DeliveryApi.Api.Services
         {
             var categoria = await _memoryCache.GetOrCreateAsync<Categoria>(CACHE_KEY + nomeCategoria, async item =>
             {
-                return await _categoriaRepository.ObterPorIdAsync(nomeCategoria);
+                return await _categoriaRepository.ObterPorNomeAsync(nomeCategoria);
             });
 
             if (categoria is null)
