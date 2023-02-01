@@ -69,6 +69,7 @@ namespace DeliveryApi.Api.Services
             await _categoriaService.ObterPorNomeAsync(produtoAtualizado.Categoria);
 
             await _produtoRepository.AtualizarAsync(id, produtoAtualizado);
+            _memoryCache.Remove(CACHE_KEY);
             _memoryCache.Remove(CACHE_KEY + id);
         }
 
@@ -77,6 +78,7 @@ namespace DeliveryApi.Api.Services
             await ObterPorIdAsync(id);
 
             await _produtoRepository.RemoverAsync(id);
+            _memoryCache.Remove(CACHE_KEY);
             _memoryCache.Remove(CACHE_KEY + id);
         }
     }
