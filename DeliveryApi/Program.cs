@@ -7,6 +7,10 @@ using DeliveryApi.Domain.Interfaces.Services;
 using DeliveryApi.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var value = Environment.GetEnvironmentVariable("CON_STRING");
+
+System.Console.WriteLine("Connection string:");
+System.Console.WriteLine(value);
 
 // Add services to the container.
 builder.Services.AddMemoryCache();

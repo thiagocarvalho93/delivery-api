@@ -12,7 +12,7 @@ namespace DeliveryApi.Data.Context
 
         public DatabaseContext(IOptions<DeliveryDatabaseSettings> deliveryDatabaseSettings)
         {
-            var mongoClient = new MongoClient(deliveryDatabaseSettings.Value.ConnectionString);
+            var mongoClient = new MongoClient(Environment.GetEnvironmentVariable("CON_STRING"));
             var mongoDatabase = mongoClient.GetDatabase(deliveryDatabaseSettings.Value.DatabaseName);
             Produtos = mongoDatabase.GetCollection<Produto>(deliveryDatabaseSettings.Value.ProdutosCollectionName);
             Categorias = mongoDatabase.GetCollection<Categoria>(deliveryDatabaseSettings.Value.CategoriasCollectionName);
