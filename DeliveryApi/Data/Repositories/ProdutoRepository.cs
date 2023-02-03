@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using DeliveryApi.Data.Context.Interfaces;
 using DeliveryApi.Domain.Models;
-using DeliveryApi.Domain.Interfaces.Repositories;
+using DeliveryApi.Domain.Repositories.Interfaces;
 
 namespace DeliveryApi.Data.Repositories
 {

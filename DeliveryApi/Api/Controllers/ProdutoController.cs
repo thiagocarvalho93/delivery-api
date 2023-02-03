@@ -1,6 +1,6 @@
-using DeliveryApi.Api.Exceptions;
+using DeliveryApi.Domain.Exceptions;
 using DeliveryApi.Domain.Models;
-using DeliveryApi.Domain.Interfaces.Services;
+using DeliveryApi.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApi.Api.Controllers

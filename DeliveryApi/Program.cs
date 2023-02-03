@@ -2,9 +2,9 @@ using DeliveryApi.Data;
 using DeliveryApi.Data.Context;
 using DeliveryApi.Data.Context.Interfaces;
 using DeliveryApi.Data.Repositories;
-using DeliveryApi.Domain.Interfaces.Repositories;
-using DeliveryApi.Domain.Interfaces.Services;
-using DeliveryApi.Api.Services;
+using DeliveryApi.Domain.Repositories.Interfaces;
+using DeliveryApi.Domain.Services.Interfaces;
+using DeliveryApi.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var value = Environment.GetEnvironmentVariable("CON_STRING");

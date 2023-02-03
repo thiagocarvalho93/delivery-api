@@ -1,10 +1,10 @@
-using DeliveryApi.Api.Exceptions;
+using DeliveryApi.Domain.Exceptions;
 using DeliveryApi.Domain.Models;
-using DeliveryApi.Domain.Interfaces.Repositories;
-using DeliveryApi.Domain.Interfaces.Services;
+using DeliveryApi.Domain.Repositories.Interfaces;
+using DeliveryApi.Domain.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace DeliveryApi.Api.Services
+namespace DeliveryApi.Domain.Services
 {
     public class CategoriaService : ICategoriaService
     {
