@@ -10,6 +10,7 @@ namespace DeliveryApi.Domain.Mapper
         {
             CreateMap<Produto, ProdutoRequestDTO>().ReverseMap();
             CreateMap<Produto, ProdutoResponseDTO>().ReverseMap();
+            CreateMap<Adicional, AdicionalDTO>().ReverseMap();
         }
     }
 }

@@ -1,5 +1,4 @@
 using DeliveryApi.Domain.DTOs.Categoria;
-using DeliveryApi.Domain.Models;
 
 namespace DeliveryApi.Domain.Services.Interfaces
 {

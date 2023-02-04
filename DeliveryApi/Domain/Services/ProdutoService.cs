@@ -1,3 +1,5 @@
+using AutoMapper;
+using DeliveryApi.Domain.DTOs.Produto;
 using DeliveryApi.Domain.Exceptions;
 using DeliveryApi.Domain.Models;
 using DeliveryApi.Domain.Repositories.Interfaces;
@@ -13,25 +15,27 @@ namespace DeliveryApi.Domain.Services
         public const string CACHE_KEY = "pd";
         // private readonly MemoryCacheEntryOptions cacheEntryOptions;
         private readonly IMemoryCache _memoryCache;
+        private readonly IMapper _mapper;
 
-        public ProdutoService(IProdutoRepository produtoRepository, ICategoriaService categoriaService, IMemoryCache memoryCache)
+        public ProdutoService(IProdutoRepository produtoRepository, ICategoriaService categoriaService, IMemoryCache memoryCache, IMapper mapper)
         {
             _produtoRepository = produtoRepository;
             _categoriaService = categoriaService;
             _memoryCache = memoryCache;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Produto>> ObterTodosAsync()
+        public async Task<IEnumerable<ProdutoResponseDTO>> ObterTodosAsync()
         {
             var produtos = await _memoryCache.GetOrCreateAsync<IEnumerable<Produto>>(CACHE_KEY, async item =>
             {
                 return await _produtoRepository.ObterTodosAsync();
             });
 
-            return produtos;
+            return _mapper.Map<IEnumerable<Produto>, IEnumerable<ProdutoResponseDTO>>(produtos);
         }
 
-        public async Task<Produto> ObterPorIdAsync(string id)
+        public async Task<ProdutoResponseDTO> ObterPorIdAsync(string id)
         {
             var produto = await _memoryCache.GetOrCreateAsync<Produto>(CACHE_KEY + id, async item =>
             {
@@ -42,10 +46,10 @@ namespace DeliveryApi.Domain.Services
                 throw new NotFoundException("Produto não encontrado");
             }
 
-            return produto;
+            return _mapper.Map<Produto, ProdutoResponseDTO>(produto);
         }
 
-        public async Task AdicionarAsync(Produto novoProduto)
+        public async Task AdicionarAsync(ProdutoRequestDTO novoProduto)
         {
             if (novoProduto.Categoria is null)
             {
@@ -53,20 +57,21 @@ namespace DeliveryApi.Domain.Services
             }
             await _categoriaService.ObterPorNomeAsync(novoProduto.Categoria);
 
-            await _produtoRepository.AdicionarAsync(novoProduto);
+            await _produtoRepository.AdicionarAsync(_mapper.Map<ProdutoRequestDTO, Produto>(novoProduto));
             _memoryCache.Remove(CACHE_KEY);
         }
 
-        public async Task AtualizarAsync(string id, Produto produtoAtualizado)
+        public async Task AtualizarAsync(string id, ProdutoRequestDTO request)
         {
             await ObterPorIdAsync(id);
-            if (produtoAtualizado.Categoria is null)
+            if (request.Categoria is null)
             {
                 throw new Exception("categoria é obrigatório");
             }
+            var produtoAtualizado = _mapper.Map<ProdutoRequestDTO, Produto>(request);
 
             produtoAtualizado.Id = id;
-            await _categoriaService.ObterPorNomeAsync(produtoAtualizado.Categoria);
+            await _categoriaService.ObterPorNomeAsync(request.Categoria);
 
             await _produtoRepository.AtualizarAsync(id, produtoAtualizado);
             _memoryCache.Remove(CACHE_KEY);

@@ -1,5 +1,5 @@
+using DeliveryApi.Domain.DTOs.Produto;
 using DeliveryApi.Domain.Exceptions;
-using DeliveryApi.Domain.Models;
 using DeliveryApi.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +17,10 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Produto>> ObterTodos() => await _produtoService.ObterTodosAsync();
+        public async Task<IEnumerable<ProdutoResponseDTO>> ObterTodos() => await _produtoService.ObterTodosAsync();
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Produto>> ObterPorId(string id)
+        public async Task<ActionResult<ProdutoResponseDTO>> ObterPorId(string id)
         {
             try
             {
@@ -37,13 +37,13 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Adicionar(Produto novoProduto)
+        public async Task<IActionResult> Adicionar(ProdutoRequestDTO novoProduto)
         {
             try
             {
                 await _produtoService.AdicionarAsync(novoProduto);
-                
-                return CreatedAtAction(nameof(ObterPorId), new { id = novoProduto.Id }, novoProduto);
+
+                return CreatedAtAction(nameof(ObterPorId), new { }, novoProduto);
             }
             catch (NotFoundException ex)
             {
@@ -56,7 +56,7 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, Produto produtoAtualizado)
+        public async Task<IActionResult> Update(string id, ProdutoRequestDTO produtoAtualizado)
         {
             try
             {
