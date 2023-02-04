@@ -1,3 +1,5 @@
+using AutoMapper;
+using DeliveryApi.Domain.DTOs.Categoria;
 using DeliveryApi.Domain.Exceptions;
 using DeliveryApi.Domain.Models;
 using DeliveryApi.Domain.Repositories.Interfaces;
@@ -12,26 +14,28 @@ namespace DeliveryApi.Domain.Services
         public const string CACHE_KEY = "ct";
         private readonly MemoryCacheEntryOptions cacheEntryOptions;
         private readonly IMemoryCache _memoryCache;
+        private readonly IMapper _mapper;
 
-        public CategoriaService(ICategoriaRepository categoriaRepository, IMemoryCache memoryCache)
+        public CategoriaService(ICategoriaRepository categoriaRepository, IMemoryCache memoryCache, IMapper mapper)
         {
             _categoriaRepository = categoriaRepository;
             _memoryCache = memoryCache;
+            _mapper = mapper;
             cacheEntryOptions = new MemoryCacheEntryOptions()
             .SetSlidingExpiration(TimeSpan.FromDays(1));
         }
 
-        public async Task<IEnumerable<Categoria>> ObterTodosAsync()
+        public async Task<IEnumerable<CategoriaResponseDTO>> ObterTodosAsync()
         {
             var categorias = await _memoryCache.GetOrCreateAsync<IEnumerable<Categoria>>(CACHE_KEY, async item =>
             {
                 return await _categoriaRepository.ObterTodosAsync();
             });
 
-            return categorias;
+            return _mapper.Map<IEnumerable<Categoria>, IEnumerable<CategoriaResponseDTO>>(categorias);
         }
 
-        public async Task<Categoria> ObterPorIdAsync(string id)
+        public async Task<CategoriaResponseDTO> ObterPorIdAsync(string id)
         {
             var categoria = await _memoryCache.GetOrCreateAsync<Categoria>(CACHE_KEY + id, async item =>
             {
@@ -42,10 +46,10 @@ namespace DeliveryApi.Domain.Services
             {
                 throw new NotFoundException("Categoria não encontrada");
             }
-            return categoria;
+            return _mapper.Map<Categoria, CategoriaResponseDTO>(categoria);
         }
 
-        public async Task<Categoria> ObterPorNomeAsync(string nomeCategoria)
+        public async Task<CategoriaResponseDTO> ObterPorNomeAsync(string nomeCategoria)
         {
             var categoria = await _memoryCache.GetOrCreateAsync<Categoria>(CACHE_KEY + nomeCategoria, async item =>
             {
@@ -56,20 +60,20 @@ namespace DeliveryApi.Domain.Services
             {
                 throw new NotFoundException("Categoria não encontrada");
             }
-            return categoria;
+            return _mapper.Map<Categoria, CategoriaResponseDTO>(categoria);
         }
 
-        public async Task AdicionarAsync(Categoria novoCategoria)
+        public async Task AdicionarAsync(CategoriaRequestDTO novoCategoria)
         {
-            await _categoriaRepository.AdicionarAsync(novoCategoria);
+            await _categoriaRepository.AdicionarAsync(_mapper.Map<CategoriaRequestDTO, Categoria>(novoCategoria));
             _memoryCache.Remove(CACHE_KEY);
         }
 
-        public async Task AtualizarAsync(string id, Categoria categoriaAtualizada)
+        public async Task AtualizarAsync(string id, CategoriaRequestDTO request)
         {
             var categoriaAntes = await ObterPorIdAsync(id);
+            var categoriaAtualizada = _mapper.Map<CategoriaRequestDTO, Categoria>(request);
 
-            categoriaAtualizada.Id = id;
             await _categoriaRepository.AtualizarAsync(id, categoriaAtualizada);
 
             _memoryCache.Remove(CACHE_KEY + id);

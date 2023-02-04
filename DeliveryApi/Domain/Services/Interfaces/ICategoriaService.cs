@@ -1,14 +1,15 @@
+using DeliveryApi.Domain.DTOs.Categoria;
 using DeliveryApi.Domain.Models;
 
 namespace DeliveryApi.Domain.Services.Interfaces
 {
     public interface ICategoriaService
     {
-        public Task<IEnumerable<Categoria>> ObterTodosAsync();
-        public Task<Categoria> ObterPorIdAsync(string id);
-        public Task<Categoria> ObterPorNomeAsync(string nome);
-        public Task AdicionarAsync(Categoria newCategoria);
-        public Task AtualizarAsync(string id, Categoria updatedCategoria);
+        public Task<IEnumerable<CategoriaResponseDTO>> ObterTodosAsync();
+        public Task<CategoriaResponseDTO> ObterPorIdAsync(string id);
+        public Task<CategoriaResponseDTO> ObterPorNomeAsync(string nome);
+        public Task AdicionarAsync(CategoriaRequestDTO newCategoria);
+        public Task AtualizarAsync(string id, CategoriaRequestDTO updatedCategoria);
         public Task RemoverAsync(string id);
     }
 }

@@ -1,5 +1,5 @@
+using DeliveryApi.Domain.DTOs.Categoria;
 using DeliveryApi.Domain.Exceptions;
-using DeliveryApi.Domain.Models;
 using DeliveryApi.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +17,10 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Categoria>> ObterTodos() => await _categoriaService.ObterTodosAsync();
+        public async Task<IEnumerable<CategoriaResponseDTO>> ObterTodos() => await _categoriaService.ObterTodosAsync();
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Categoria>> ObterPorId(string id)
+        public async Task<ActionResult<CategoriaResponseDTO>> ObterPorId(string id)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpGet("nome/{nome}")]
-        public async Task<ActionResult<Categoria>> ObterPorNome(string nome)
+        public async Task<ActionResult<CategoriaResponseDTO>> ObterPorNome(string nome)
         {
             try
             {
@@ -54,12 +54,12 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Adicionar(Categoria novaCategoria)
+        public async Task<IActionResult> Adicionar(CategoriaRequestDTO request)
         {
             try
             {
-                await _categoriaService.AdicionarAsync(novaCategoria);
-                return CreatedAtAction(nameof(ObterPorId), new { id = novaCategoria.Id }, novaCategoria);
+                await _categoriaService.AdicionarAsync(request);
+                return CreatedAtAction(nameof(ObterPorId), new { }, request);
             }
             catch (NotFoundException ex)
             {
@@ -72,11 +72,11 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Atualizar(string id, Categoria categoriaAtualizada)
+        public async Task<IActionResult> Atualizar(string id, CategoriaRequestDTO request)
         {
             try
             {
-                await _categoriaService.AtualizarAsync(id, categoriaAtualizada);
+                await _categoriaService.AtualizarAsync(id, request);
                 return NoContent();
             }
             catch (NotFoundException ex)

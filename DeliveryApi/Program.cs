@@ -5,6 +5,8 @@ using DeliveryApi.Data.Repositories;
 using DeliveryApi.Domain.Repositories.Interfaces;
 using DeliveryApi.Domain.Services.Interfaces;
 using DeliveryApi.Domain.Services;
+using AutoMapper;
+using DeliveryApi.Domain.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 var value = Environment.GetEnvironmentVariable("CON_STRING");
@@ -14,12 +16,21 @@ System.Console.WriteLine(value);
 
 // Add services to the container.
 builder.Services.AddMemoryCache();
-builder.Services.Configure<DeliveryDatabaseSettings>(builder.Configuration.GetSection("DeliveryDatabase"));
-builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-builder.Services.AddScoped<IProdutoService, ProdutoService>();
+
+var config = new MapperConfiguration(cfg =>
+    {
+        cfg.AddProfile<ProdutoProfile>();
+        cfg.AddProfile<CategoriaProfile>();
+    });
+
+IMapper mapper = config.CreateMapper();
+builder.Services.Configure<DeliveryDatabaseSettings>(builder.Configuration.GetSection("DeliveryDatabase"))
+                .AddSingleton(mapper)
+                .AddScoped<IDatabaseContext, DatabaseContext>()
+                .AddScoped<IProdutoRepository, ProdutoRepository>()
+                .AddScoped<ICategoriaRepository, CategoriaRepository>()
+                .AddScoped<ICategoriaService, CategoriaService>()
+                .AddScoped<IProdutoService, ProdutoService>();
 
 builder.Services.AddControllers()
                     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
