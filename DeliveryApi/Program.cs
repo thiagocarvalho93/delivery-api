@@ -58,6 +58,11 @@ app.UseSwagger();
 app.UseSwaggerUI();
 // }
 
+app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader())
+        .UseAuthentication();
 
 // app.UseHttpsRedirection();
 
