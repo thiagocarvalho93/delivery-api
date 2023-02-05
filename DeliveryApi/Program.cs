@@ -40,14 +40,14 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer()
                 .AddSwaggerGen();
 
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
-        options.HttpsPort = 443;
-    });
-}
+// if (!builder.Environment.IsDevelopment())
+// {
+//     builder.Services.AddHttpsRedirection(options =>
+//     {
+//         options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+//         options.HttpsPort = 443;
+//     });
+// }
 
 var app = builder.Build();
 
