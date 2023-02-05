@@ -43,7 +43,7 @@ namespace DeliveryApi.Api.Controllers
             {
                 await _produtoService.AdicionarAsync(novoProduto);
 
-                return CreatedAtAction(nameof(ObterPorId), new { }, novoProduto);
+                return Ok();
             }
             catch (NotFoundException ex)
             {
@@ -56,7 +56,7 @@ namespace DeliveryApi.Api.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, ProdutoRequestDTO produtoAtualizado)
+        public async Task<IActionResult> Atualizar(string id, ProdutoRequestDTO produtoAtualizado)
         {
             try
             {

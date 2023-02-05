@@ -59,7 +59,7 @@ namespace DeliveryApi.Api.Controllers
             try
             {
                 await _categoriaService.AdicionarAsync(request);
-                return CreatedAtAction(nameof(ObterPorId), new { }, request);
+                return Ok();
             }
             catch (NotFoundException ex)
             {
