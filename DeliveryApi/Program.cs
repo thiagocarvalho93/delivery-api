@@ -7,6 +7,7 @@ using DeliveryApi.Domain.Services.Interfaces;
 using DeliveryApi.Domain.Services;
 using AutoMapper;
 using DeliveryApi.Domain.Mapper;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 var value = Environment.GetEnvironmentVariable("CON_STRING");
@@ -36,16 +37,25 @@ builder.Services.AddControllers()
                     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer()
+                .AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// if (app.Environment.IsDevelopment())
+// {
+app.UseSwagger();
+app.UseSwaggerUI();
+// }
+
+if (!builder.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+        options.HttpsPort = 443;
+    });
 }
 
 app.UseHttpsRedirection();
